@@ -34,16 +34,16 @@ function getImages() {
                 images.forEach(image => {
                     console.log(image);
                     if (image.moderate === false) {
-                         image.user.image ? html = html +'<div class="card-container"><div class="card-header"><div class="d-flex justify-content-between align-items-center mt-2"><div class="d-flex justify-content-between align-items-center"><div class="mr-2"><img class="rounded-circle" height="50" width="50" src="' + image.user.image +'" alt=""></div><div class="ml-2"><div class="h5 m-0">@' + image.user.username + '</div></div></div></div></div><div class="card-body"><div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> Posté le : ' + image.createdAt + '</div><a class="card-link" href="#"></a><h2 class="card-text">' + image.title + '</h2><img class="messageImage" src="' + image.image + '"></img></div>' : html = html + '<div class="card-container"><div class="card-header"><div class="d-flex justify-content-between align-items-center mt-2"><div class="d-flex justify-content-between align-items-center"><div class="mr-2"><img class="rounded-circle" height="50" width="50" src="images/img_avatar2.png" alt=""></div><div class="ml-2"><div class="h5 m-0">@' + image.user.username + '</div></div></div></div></div><div class="card-body"><div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> Posté le : ' + image.createdAt + '</div><a class="card-link" href="#"></a><h2 class="card-text">' + image.title + '</h2><img class="messageImage" src="' + image.image + '"></img></div>';
+                        
+                        html = html + '<div class="message-container"><div class="message-header card-header"><div class="d-flex align-items-center"><div class="mr-2"><a class="text-decoration-none" href="account.html?id=' + image.user.user_id + '"><img class="rounded-circle" height="50" width="50" src="' +  
+                        
+                        (image.user.image ? image.user.image : "images/img_avatar2.png")  + '" alt=""></div><div class="ml-2"><div class="h5 m-0">@' + image.user.username + '</div></div></div></div></div><div class="card-body"><div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> Posté le : ' + image.createdAt + '</div><a class="card-link" href="#"></a><h2 class="card-text">' + image.title + '</h2><img class="messageImage" src="' + image.image + '"></img></div>' + 
+                        
+                        (id.userId === image.user.user_id ?'<div id="modifyImage" class="modifyPost p-2"><button class="putImage btn btn-primary" onclick=window.open("image.html?id=' + image.messageMedia_id + '","","toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,top=200,left=100,width=800,height=400")><i class="bi bi-pencil-square"></i></button></div></div></div></div>' : "");
+                        
+                        document.getElementById("messagesList").innerHTML = html;
 
-                        if (id.userId === image.user.user_id) {
-                            /*Liste des produits avec balises html*/
-                            html = html + '<div id="modifyImage" class="modifyPost p-2"><button class="putImage btn btn-primary" onclick=window.open("image.html?id=' + image.messageMedia_id + '","","toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,top=200,left=100,width=800,height=400")><i class="bi bi-pencil-square"></i></button></div></div></div></div>';
-                            document.getElementById("messagesList").innerHTML = html;
-
-                        } else {
-                            document.getElementById("messagesList").innerHTML = html;
-                        }
+                     
                     }
                 })
             });

@@ -36,21 +36,13 @@ function getUser() {
                 /*Réponse si fonctionne correctement*/
                 response.json().then(function (user) {
                     let html = "";
-                    if (user.image === null) {
+                 
                        
-                        id.userId === user.user_id ? html = html + '<div class="px-4 cover media profile-head d-flex justify-content-between align-items-center"><img class="profileImage rounded-circle" src="images/img_avatar2.png" alt="image de profil"><h2 class="text-center"> @' + user.username + '</h2><button onclick=window.open("accountModify.html?id=' + user.user_id + '","","toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,top=200,left=100,width=800,height=400") class="btn btn-outline-dark btn-sm btn-block mb-5" >Editer le profil</button></div>'
-
-                        : html = html + '<div class="px-4 cover media profile-head d-flex justify-content-between align-items-center"><img class="profileImage rounded-circle" src="images/img_avatar2.png" alt="image de profil"><h2 class="text-center"> @' + user.username + '</h2>';
-                        document.getElementById("userProfile").innerHTML = html;
-
-                    } else {
-                        id.userId === user.user_id ? html = html + '<div class="px-4 cover media profile-head d-flex justify-content-between align-items-center"><img class="profileImage rounded-circle" src=" '+ user.image + '" alt="image de profil" ><h2 class="text-center"> @' + user.username + '</h2><button onclick=window.open("accountModify.html?id=' + user.user_id + '","","toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,top=200,left=100,width=800,height=400") class="btn btn-outline-dark btn-sm btn-block mb-5" >Editer le profil</button></div>' 
-
-                        : html = html + '<div class="px-4 cover media profile-head d-flex justify-content-between align-items-center"><img class="profileImage rounded-circle" src="images/img_avatar2.png" alt="image de profil"><h2 class="text-center"> @' + user.username + '</h2>';
+                    html = html + '<div class=" profile-head px-4"><img class="profileImage rounded-circle" src="' + (user.image === null ? "images/img_avatar2.png" : user.image) + '" alt="image de profil"><h2 class="text-center"> @' + user.username + '</h2>' + (id.userId === user.user_id ? '<button onclick=window.open("accountModify.html?id=' + user.user_id + '","","toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,top=200,left=100,width=800,height=400") class="btn btn-outline-dark btn-sm btn-block mb-5" >Editer le profil</button></div>' : "");
                         
                     
                         document.getElementById("userProfile").innerHTML = html;
-                    }
+                    
              
 
                     let messages = "";

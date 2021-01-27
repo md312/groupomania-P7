@@ -9,7 +9,6 @@ p{
 
 a{
   color: #222;
-
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -61,7 +60,7 @@ label{
 
 @media only screen and (max-width: 600px){
   .h2{
-   font-size: 0.8rem;
+   font-size: 0.5rem;
   }
   .logo{
     max-width: 100%;
@@ -454,10 +453,22 @@ input[type=checkbox]:not(old):checked + label > span:before {
   height: 150px;
 }
 
+.profile-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media only screen and (max-width: 600px){
   .profileImage{
     width: 50px;
     height: 50px;
+  }
+
+  .profile-head{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
 }
