@@ -24,7 +24,7 @@ function loginUser() {
                 /*Envoie les informations renvoyées par l'API dans le sessionStorage*/
                 localStorage.setItem("userID", JSON.stringify(data));
                 /*Ouvre une fenêtre avec un Query Param basé sur l'id de commande*/
-                window.open("index.html");
+                window.location.replace("index.html");
             })
         }
     }).catch(function (err) {
