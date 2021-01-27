@@ -34,10 +34,9 @@ function getMessages() {
                 /*Boucle for pour itérer les éléments*/
                 messages.forEach(message => {
                     if (message.moderate === false) {
+                 
+                         html = html + ' <div class="message-container"><div class="message-header card-header"><div class="d-flex align-items-center"><div class="mr-2"><img class="rounded-circle" height="50" width="50" src="' + (message.user.image? message.user.image : "tutu" ) + '" alt=""></div> <div class="h5 m-0 text-left">@' + message.user.username + '</div> </div> </div> <div class="message-body card-body"> <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> Posté le : ' + message.createdAt + ' </div> <p class="message-text">' + message.content + '</p></div>';
 
-                        message.user.image ? html = html + ' <div class="message-container"><div class="message-header card-header"><div class="d-flex align-items-center"><div class="mr-2"><img class="rounded-circle" height="50" width="50" src="' + message.user.image + '" alt=""></div> <div class="h5 m-0 text-left">@' + message.user.username + '</div> </div> </div> <div class="message-body card-body"> <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> Posté le : ' + message.createdAt + ' </div> <p class="message-text">' + message.content + '</p></div>'
-
-                            : html = html + ' <div class="message-container"><div class="message-header card-header"><div class="d-flex align-items-center"><div class="mr-2"><img class="rounded-circle" height="50" width="50" src="images/img_avatar2.png" alt=""></div> <div class="h5 m-0 text-left">@' + message.user.username + '</div> </div> </div> <div class="message-body card-body"> <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i> Posté le : ' + message.createdAt + ' </div> <p class="message-text"> ' + message.content + '</p></div>';
 
                         if (id.userId === message.user.user_id) {
 
