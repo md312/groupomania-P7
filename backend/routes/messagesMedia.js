@@ -5,22 +5,25 @@ const express = require('express');
 const router = express.Router();
 
 /*Importation des middlewares dans des variables*/
-const messagesCtrl = require('../controllers/message');
+const messagesMediaCtrl = require('../controllers/messageMedia')
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
 // /*Route likes*/
 // router.post('/:id/like', auth, messagesCtrl.likeSauce);
 /*Route création du message*/
-router.post('/', auth, messagesCtrl.createMessage);
+router.post('/', auth, multer, messagesMediaCtrl.createMessage);
 // /*Route modification du message*/
-router.put('/:id', auth, messagesCtrl.updateMessage);
+router.put('/:id', auth, multer, messagesMediaCtrl.updateMessage);
 /*Route suppression de message*/
-router.delete('/:id', auth, messagesCtrl.deleteMessage);
+router.delete('/:id', auth, multer, messagesMediaCtrl.deleteMessage);
 /*Affichage d'un message*/
-router.get('/:id', auth, messagesCtrl.getOneMessage);
+router.get('/:id', auth, multer, messagesMediaCtrl.getOneMessage);
 /*Affichage de tous les messages*/
-router.get('/', auth, messagesCtrl.getAllMessages);
+router.get('/', auth, multer, messagesMediaCtrl.getAllMessages);
+
+/*
+
 
 /*Exportation du router*/
 module.exports = router;

@@ -2,21 +2,24 @@
 const bcrypt = require('bcrypt');
 /*Module de création de token utilisateur*/
 const jwt = require('jsonwebtoken');
+/*Importation de multer*/ 
+/*Import du module fs*/
+const fs = require('fs');
+const multer = require ('../middleware/multer-config');
 
 /*Importation du modèle User*/
 const User = require('../models/User');
+const Message = require('../models/Message');
+const MessageMedia = require('../models/MessageMedia');
 
-function dtoUser(user) {
+/*Importation DTO User*/
+const dtoUser = require('../dto/user');
+const dtoUsers= require('../dto/users');
 
-    return Object.assign(
-      {},
-      {
-        user_id: user.user_id,
-        username: user.username
-      }
-    )
-};
-  
+User.hasMany(Message, {foreignKey: 'user_id'});
+Message.belongsTo(User, {foreignKey: 'user_id'});
+
+User.hasMany(MessageMedia, {foreignKey: 'user_id'});
 
 /*Création d'un utilisateur*/
 exports.signup = (req, res, next) => {
@@ -32,7 +35,7 @@ exports.signup = (req, res, next) => {
                 email: req.body.email,
                 password: hash
             })
-                .then(response => res.status(201).json(dtoUser(response)))
+                .then(user => res.status(201).json(dtoUser(user)))
                 .catch(error => res.status(400).json({ error }));
         })
        
@@ -49,6 +52,7 @@ exports.login = (req, res, next) => {
             }
             /*Sinon on compare le hash du mot de passe*/
             bcrypt.compare(req.body.password, user.password)
+            
                 .then(valid => {
                     /*Si le mot de passe ne correspond pas*/
                     if (!valid) {
@@ -57,10 +61,12 @@ exports.login = (req, res, next) => {
                     /*S'il correspond on envoie un token utilisateur pour une durée de 15mn*/
                     res.status(200).json({
                         userId: user.user_id,
+                        username: user.username,
+                        isAdmin: user.isAdmin,
                         token: jwt.sign(
                             { userId: user.user_id },
                             '8uVGAuQuD7b2zmWzi0kgTJOSEHfZrIitUMDdjBUr1n_ZBHwV8CU_sgE8UrsBUVvzw8jWPe9p3kVDtekcUemA9WhmPlmR4HTMOKFCP-4bTeX4Un1cPET9kLLzIMUdieZV6lqKx8oxKflcp0UT86hK3T2IPqpAdA8',
-                            { expiresIn: 15 * 60 }
+                            { expiresIn: 60 * 60 }
                         )
                     });
                 })
@@ -69,34 +75,79 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 }; 
 
-
 exports.update = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-    var values = { username: req.body.username,    
-        age : req.body.age,
-        fonction: req.body.fonction,
-        about: req.body.about,
-        email: req.body.email,
-        password: hash };
+        .then(hash => {
+            const values = req.file ?
+                {    /*Récupération du corps de la requête et transformation de l'url image en nom de fichier*/
+                    username: req.body.username,
+                    age: req.body.age,
+                    fonction: req.body.fonction,
+                    about: req.body.about,
+                    email: req.body.email,
+                    password: hash,
+                    image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                } : {
+                    username: req.body.username,
+                    age: req.body.age,
+                    fonction: req.body.fonction,
+                    about: req.body.about,
+                    email: req.body.email,
+                    password: hash
+                };
+            var condition = { where: { user_id: req.params.id } }
+            var options = { multi: true };
 
-    var condition = {where: {user_id : req.body.user_id}} 
-    var options = { multi: true };
+            User.update(values, condition, options)
+        })
 
-    User.update(values, condition , options)})
-       .then(response => res.status(200).json((response)))
-            .catch(error => res.status(400).json({ error }))
+        .then(response => {
+            let user = User.findOne({ where: { user_id: req.params.id } }
+            ).then(user => res.status(200).json((dtoUser(user)))
+            )
+        })
+        .catch(error => res.status(400).json({ error }))
 }
 
 
 exports.delete = (req, res, next) => {
-    /*Cryptage du mot de passe*/
-    User.findOne({ where: {user_id: req.body.user_id }})
-        .then(user => {
-            /*Création d'un nouvel utilisateur dans la base de donnée*/
-            user.destroy()
-                .then( res.status(201).json({message : "Utilisateur supprimé !"}))
-                .catch(error => res.status(400).json({ error }));
-        })
-        .catch(error => res.status(500).json({ error }));
+
+    User.findOne({ where: { user_id: req.params.id } })
+        .then(deletedUser => {
+            if (deletedUser.image !== null) {
+            const filename = deletedUser.image.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                /*Création d'un nouvel utilisateur dans la base de donnée*/
+                deletedUser.destroy()
+            })
+        }else{
+            deletedUser.destroy()
+        }
+        
+        }) .then(res.status(204).json({ message: "Utilisateur supprimé !" }))
+                    .catch(error => res.status(400).json({ error }));
+       
+};
+
+exports.getUser = (req, res, next) => {
+    User.findOne({
+        where: { user_id: req.params.id },
+        include: [
+            {
+                model: Message,
+            },
+            {
+                model: MessageMedia,
+            }
+        ],
+        
+    }).then(response =>
+        res.status(200).json(dtoUser(response)))
+        .catch(error => res.status(400).json({ error }));
+};
+
+exports.getUsers = (req, res, next) => {
+    User.findAll().then(response =>
+        res.status(200).json(dtoUsers(response)))
+        .catch(error => res.status(400).json({ error }));
 };

@@ -29,17 +29,15 @@ const User = sequelize.define('user', {
   
     // Column-2, name 
     username: { type: Sequelize.STRING, allowNull:false, unique: true }, 
+    
+    image : {type: Sequelize.STRING(4000), required : false, allowNull: true},
 
-    age: {type : Sequelize.INTEGER, allowNull: true},
-
-    fonction: {type: Sequelize.STRING, allowNull: true},
-
-    about: {type: Sequelize.TEXT, allowNull: true},
-  
     // Column-3, email 
     email: { type: Sequelize.STRING, allowNull:false, unique: true }, 
 
     password:{type : Sequelize.STRING, allowNull: false},
+
+    isAdmin: {type : Sequelize.BOOLEAN, allowNull: false, defaultValue: false}
   
      
 }) 

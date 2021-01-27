@@ -4,11 +4,9 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
 
-/*Importation des routes sauces et user*/
+const messagesMediaRoutes = require('./routes/messagesMedia');
 const messagesRoutes = require('./routes/messages');
-const userRoutes = require('./routes/users');
-
-
+const usersRoutes = require('./routes/users');
 
 /*--------------- Synchronisation des modèles dans la base de donnée ---------------------*/
 
@@ -16,6 +14,7 @@ const userRoutes = require('./routes/users');
 const sequelize = require('./utils/database'); 
 const User = require('./models/User'); 
 const Message = require('./models/Message');
+const MessageMedia = require('./models/MessageMedia')
   
 // Sync all models that are not 
 // already in the database 
@@ -45,7 +44,8 @@ app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // /*Utilisation des routes sauces et user sur les adresses requises*/
+app.use('/api/messagesMedia', messagesMediaRoutes);
 app.use('/api/messages', messagesRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/api/users', usersRoutes);
 
 module.exports = app;
