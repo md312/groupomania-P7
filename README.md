@@ -17,15 +17,7 @@ SINON vous pouvez à tout moment modifier ces informations pour Sequelize dans :
 
 Normalement elles sont déjà présentes. Si le serveur crashe et vous demande une de ces dépendances, il faut effectuer la commande suivante : npm install --save "nom de la dépendance" :
 
--express
--mysql2
--sequelize
--body-parser
--bcrypt
--jsonwebtoken
--multer
--path
--fs
+express / mysql2 / sequelize / body-parser / bcrypt / jsonwebtoken / multer / path / fs
 
 
 ##Connexion au serveur
