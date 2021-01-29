@@ -11,6 +11,8 @@ Nom de BDD : groupomania_db
 Nom utilisateur : mdub
 Mot de passe : cocochanel337
 
+Puis il vous faut importer le fichier SQL : GPM_database.sql afin d'avoir les tables du projet. 
+
 SINON vous pouvez à tout moment modifier ces informations pour Sequelize dans : backend/utils/database.js
 
 ##Liste des dépendances : 
